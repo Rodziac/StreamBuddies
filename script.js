@@ -101,6 +101,10 @@ twitchClient.on('message', (channel, tags, message, self) => {
                 characters[tags['display-name']] = new Character(tags['display-name'])
             }
             break;
+        case '!leave':
+            currentCharacter.domElement.remove()
+            characters[username] = null
+            break;
         case '!jump':
             if (currentCharacter) {
                 currentCharacter.jump()
