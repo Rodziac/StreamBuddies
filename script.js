@@ -18,7 +18,7 @@ class Character {
     }
     _setDeathTimer = () => {
         if (this.disappearTimeout) {
-            clearInterval(this.disappearTimeout)
+            clearTimeout(this.disappearTimeout)
         }
         this.disappearTimeout = setTimeout(() => {
             this.domElement.remove()
@@ -118,6 +118,7 @@ twitchClient.on('message', (channel, tags, message, self) => {
             break;
         case '!leave':
             if (currentCharacter) {
+                clearTimeout(currentCharacter.disappearTimeout)
                 currentCharacter.domElement.remove()
                 characters[tags['display-name']] = null
             }
