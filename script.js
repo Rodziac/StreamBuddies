@@ -1,17 +1,25 @@
 const arenaDom = document.getElementById("arena")
 const types = ["deathKnight", "dreadKnight", "ghost", "Lich", "necromancer", "reaper", "skeleton", "skeletonArcher", "zombie", "zombieButcher"]
 class Character {
-    constructor() {
+    constructor(name) {
         this.type = types[Math.floor(Math.random() * types.length)]
         this.altitude = 0
         this.position = Math.floor(Math.random() * arenaDom.getBoundingClientRect().width)
-        this.domElement = document.createElement("div")
-        this.chatElement = null
         this.state = "idle"
-        this.domElement.classList.add("character", this.type, this.state)
-        this.domElement.style.left = `${this.position}px`
+        this.chatElement = this._newChatElement(name)
+        this.domElement = this.createDomElement()
+        this.name = name
         arenaDom.appendChild(this.getDomElement())
         this.act()
+        this.chatClearTimeout = null
+    }
+    createDomElement = () => {
+        const domElement = document.createElement("div")
+        const chatElement = this.chatElement
+        domElement.appendChild(chatElement)
+        domElement.classList.add("character", this.type, this.state)
+        domElement.style.left = `${this.position}px`
+        return domElement
     }
     getDomElement = () => {
         return this.domElement
@@ -52,13 +60,13 @@ class Character {
         }, 10)
     }
     talk = (text) => {
-        this.domElement.innerHTML = ''
-        this.chatElement = this._newChatElement(text)
-        this.domElement.appendChild(this.chatElement)
-        setTimeout(() => {
-            if (this.chatElement) {
-                this.chatElement.remove()
-            }
+        if (this.chatClearTimeout) {
+            clearTimeout(this.chatClearTimeout)
+        }
+        this.chatElement.innerText = `${this.name} \n ${text}`
+
+        this.chatClearTimeout = setTimeout(() => {
+            this.chatElement.innerText = this.name
         }, 5000)
     }
     _newChatElement = (text) => {
@@ -90,7 +98,7 @@ twitchClient.on('message', (channel, tags, message, self) => {
     switch (message) {
         case '!join':
             if (!currentCharacter) {
-                characters[tags['display-name']] = new Character()
+                characters[tags['display-name']] = new Character(tags['display-name'])
             }
             break;
         case '!jump':
@@ -109,4 +117,11 @@ twitchClient.on('message', (channel, tags, message, self) => {
             }
     }
 	console.log(`${tags['display-name']}: ${message}`);
+})
+twitchClient.on('part', (channel, username, self) => {
+    const currentCharacter = characters[username]
+    if (currentCharacter) {
+        currentCharacter.domElement.remove()
+        characters[username] = null
+    }
 })
