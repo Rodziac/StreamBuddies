@@ -10,8 +10,20 @@ class Character {
         this.domElement = this.createDomElement()
         this.name = name
         arenaDom.appendChild(this.getDomElement())
+        this.actInterval = null
         this.act()
         this.chatClearTimeout = null
+        this.disappearTimeout = null
+        this._setDeathTimer()
+    }
+    _setDeathTimer = () => {
+        if (this.disappearTimeout) {
+            clearInterval(this.disappearTimeout)
+        }
+        this.disappearTimeout = setTimeout(() => {
+            this.domElement.remove()
+            characters[this.name] = null
+        }, 30 * 60 * 1000) // 30 minutes
     }
     createDomElement = () => {
         const domElement = document.createElement("div")
@@ -80,7 +92,7 @@ class Character {
         // TODO: setTimeout and remove jump class after animation ends.
     }
     act = () => {
-        setInterval(() => {
+        this.actInterval = setInterval(() => {
             this.walkTo(Math.floor(Math.random() * arenaDom.getBoundingClientRect().width))
         }, Math.random() * 10000)
     }
@@ -95,6 +107,9 @@ const twitchClient = new tmi.Client({ channels: [windowSearchParams.channel] })
 twitchClient.connect()
 twitchClient.on('message', (channel, tags, message, self) => {
     const currentCharacter = characters[tags['display-name']]
+    if (currentCharacter) {
+        currentCharacter._setDeathTimer()
+    }
     switch (message) {
         case '!join':
             if (!currentCharacter) {
@@ -102,8 +117,10 @@ twitchClient.on('message', (channel, tags, message, self) => {
             }
             break;
         case '!leave':
-            currentCharacter.domElement.remove()
-            characters[tags['display-name']] = null
+            if (currentCharacter) {
+                currentCharacter.domElement.remove()
+                characters[tags['display-name']] = null
+            }
             break;
         case '!jump':
             if (currentCharacter) {
@@ -122,10 +139,10 @@ twitchClient.on('message', (channel, tags, message, self) => {
     }
 	console.log(`${tags['display-name']}: ${message}`);
 })
-twitchClient.on('part', (channel, username, self) => {
-    const currentCharacter = characters[username]
-    if (currentCharacter) {
-        currentCharacter.domElement.remove()
-        characters[username] = null
-    }
-})
+// twitchClient.on('part', (channel, username, self) => {
+//     const currentCharacter = characters[username]
+//     if (currentCharacter) {
+//         currentCharacter.domElement.remove()
+//         characters[username] = null
+//     }
+// })
