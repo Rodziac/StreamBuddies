@@ -103,7 +103,7 @@ twitchClient.on('message', (channel, tags, message, self) => {
             break;
         case '!leave':
             currentCharacter.domElement.remove()
-            characters[username] = null
+            characters[tags['display-name']] = null
             break;
         case '!jump':
             if (currentCharacter) {
