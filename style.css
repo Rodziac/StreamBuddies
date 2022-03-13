@@ -34,21 +34,7 @@
     text-align: center;
 }
 
-.character .name {
-    display: inline-block;
-    font-size: 6px;
-    font-family: Arial;
-    white-space: nowrap;
-    color: #FFFFFF;
-    -webkit-text-stroke-width: 0.1px;
-    -webkit-text-stroke-color: #000000;
-    background-color: rgba(0, 0, 0, 0.4);
-    margin-left: -100%;
-    margin-right: -100%;
-    text-align: center;
-}
-
-.character.leftDirection .chat, .character.leftDirection .name {
+.character.leftDirection .chat {
     transform: scaleX(-1)
 }
 
