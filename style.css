@@ -78,6 +78,86 @@
     background-image: url('assets/MiniZombieButcher.png');
 }
 
+.character.archerMan {
+    background-image: url('assets/MiniArcherMan.png');
+}
+
+.character.cavalierMan {
+    background-image: url('assets/MiniCavalierMan.png');
+}
+
+.character.crossbowMan {
+    background-image: url('assets/MiniCrossBowMan.png');
+}
+
+.character.goblin {
+    background-image: url('assets/MiniGoblin.png');
+}
+
+.character.goblinThief {
+    background-image: url('assets/MiniGoblinThief.png');
+}
+
+.character.halberdMan {
+    background-image: url('assets/MiniHalberdMan.png');
+}
+
+.character.horseMan {
+    background-image: url('assets/MiniHorseMan.png');
+}
+
+.character.kingMan {
+    background-image: url('assets/MiniKingMan.png');
+}
+
+.character.orc {
+    background-image: url('assets/MiniOrc.png');
+}
+
+.character.orcAxeThrower {
+    background-image: url('assets/MiniOrcAxeThrower.png');
+}
+
+.character.orcBerserker {
+    background-image: url('assets/MiniOrcBerserker.png');
+}
+
+.character.orcVeteran {
+    background-image: url('assets/MiniOrcVeteran.png');
+}
+
+.character.orcWarChief {
+    background-image: url('assets/MiniOrcWarChief.png');
+}
+
+.character.orcWarrior {
+    background-image: url('assets/MiniOrcWarrior.png');
+}
+
+.character.princeMan {
+    background-image: url('assets/MiniPrinceMan.png');
+}
+
+.character.shieldMan {
+    background-image: url('assets/MiniShieldMan.png');
+}
+
+.character.spearMan {
+    background-image: url('assets/MiniSpearMan.png');
+}
+
+.character.swordMan {
+    background-image: url('assets/MiniSwordMan.png');
+}
+
+.character.wargRider {
+    background-image: url('assets/MiniWargRider.png');
+}
+
+.character.wolfRider {
+    background-image: url('assets/MiniWolfRider.png');
+}
+
 .character.idle {
     animation-name: fourstepanimation;
     animation-duration: 0.4s;

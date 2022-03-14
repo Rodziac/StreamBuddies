@@ -1,5 +1,36 @@
 const arenaDom = document.getElementById("arena")
-const types = ["deathKnight", "dreadKnight", "ghost", "Lich", "necromancer", "reaper", "skeleton", "skeletonArcher", "zombie", "zombieButcher"]
+const types = [
+    "deathKnight",
+    "dreadKnight",
+    "ghost",
+    "Lich",
+    "necromancer",
+    "reaper",
+    "skeleton",
+    "skeletonArcher",
+    "zombie",
+    "zombieButcher",
+    "archerMan",
+    "cavalierMan",
+    "crossbowMan",
+    "goblin",
+    "goblinThief",
+    "halberdMan",
+    "horseMan",
+    "kingMan",
+    "orc",
+    "orcAxeThrower",
+    "orcBerserker",
+    "orcVeteran",
+    "orcWarChief",
+    "orcWarrior",
+    "princeMan",
+    "shieldMan",
+    "spearMan",
+    "swordMan",
+    "wargRider",
+    "wolfRider"
+]
 class Character {
     constructor(name) {
         this.type = types[Math.floor(Math.random() * types.length)]
