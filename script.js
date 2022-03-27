@@ -46,6 +46,7 @@ class Character {
         this.chatClearTimeout = null
         this.disappearTimeout = null
         this._setDeathTimer()
+        this.interrupt = false
     }
     _setDeathTimer = () => {
         if (this.disappearTimeout) {
@@ -87,6 +88,11 @@ class Character {
     _walkTo = (newPosition) => {
         this.setState("walk")
         setTimeout(() => {
+            if (this.interrupt) {
+                this.setState("idle")
+                this.interrupt = false
+                return
+            }
             if (this.position > newPosition) {
                 this.setDirection("left")
                 this.position--
@@ -119,8 +125,19 @@ class Character {
         return chatElement
     }
     jump = () => {
-        // TODO: Add jump class to dom element
-        // TODO: setTimeout and remove jump class after animation ends.
+        this.interrupt = true
+        setTimeout(() => {
+            this.setState("jump")
+            if (this.domElement.classList.contains("leftDirection")) {
+                this.position -= 100
+            } else {
+                this.position += 100
+            }
+            this.domElement.style.left = `${this.position}px`
+            setTimeout(() => {
+                this.setState("idle")
+            }, 1000)
+        }, 20)
     }
     act = () => {
         this.actInterval = setInterval(() => {
@@ -163,7 +180,10 @@ twitchClient.on('message', (channel, tags, message, self) => {
             if (currentCharacter) {
                 const walkRegex = message.match(/^!walk (\d+)/)
                 if (walkRegex) {
-                    currentCharacter.walkTo(Math.floor((arenaDom.getBoundingClientRect().width / 100) * walkRegex[1]))
+                    currentCharacter.interrupt = true
+                    setTimeout(() => {
+                        currentCharacter.walkTo(Math.floor((arenaDom.getBoundingClientRect().width / 100) * walkRegex[1]))
+                    }, 20)
                 } else {
                     currentCharacter.talk(message)
                 }
