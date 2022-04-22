@@ -212,7 +212,7 @@
     animation: 1s step-end 0s 1 sixstepanimation, 500ms cubic-bezier(0, 0, 0, 0.7) 0s 2 alternate jumpheight;
 }
 
-.character.orcBerserker.jump, .character.wolfRider.jump, .character.wargRider {
+.character.orcBerserker.jump, .character.wolfRider.jump, .character.wargRider.jump {
     animation: 1s step-end 0s 1 fourstepanimation, 500ms cubic-bezier(0, 0, 0, 0.7) 0s 2 alternate jumpheight;
 }
 
