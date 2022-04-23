@@ -31,6 +31,7 @@ const types = [
     "wargRider",
     "wolfRider"
 ]
+const typesLowercase = types.map(item => item.toLowerCase())
 class Character {
     constructor(name, type) {
         this.type = type || types[Math.floor(Math.random() * types.length)]
@@ -124,6 +125,11 @@ class Character {
         chatElement.innerText = text
         return chatElement
     }
+    changeType = (newType) => {
+        this.domElement.classList.remove(this.type)
+        this.type = newType
+        this.domElement.classList.add(newType)
+    }
     jump = () => {
         this.interrupt = true
         setTimeout(() => {
@@ -163,8 +169,11 @@ twitchClient.on('message', (channel, tags, message, self) => {
             if (!currentCharacter) {
                 let charType = null
                 const messageSplit = message.split(" ")
-                if (messageSplit.length > 1 && types.indexOf(messageSplit[1]) > -1) {
-                    charType = messageSplit[1]
+                if (messageSplit.length > 1) {
+                    const selectedCharacterIndex = typesLowercase.indexOf(messageSplit[1].toLowerCase())
+                    if (selectedCharacterIndex > -1) {
+                        charType = types[selectedCharacterIndex]
+                    }
                 }
                 characters[tags['display-name']] = new Character(tags['display-name'], charType)
             }
@@ -184,15 +193,17 @@ twitchClient.on('message', (channel, tags, message, self) => {
         default:
             if (currentCharacter) {
                 const walkRegex = message.match(/^!walk (\d+)/)
+                const changeRegex = message.match(/^!change (\w+)/)
                 if (walkRegex) {
                     currentCharacter.interrupt = true
                     setTimeout(() => {
                         currentCharacter.walkTo(Math.floor((arenaDom.getBoundingClientRect().width / 100) * walkRegex[1]))
                     }, 20)
-                const changeRegex = message.match(/^!change (\w+)/)
-                if (changeRegex && types.indexOf(changeRegex[1])) {
-                    currentCharacter.type = changeRegex[1]
-                }
+                } else if (changeRegex) {
+                    const selectedCharacterIndex = typesLowercase.indexOf(changeRegex[1].toLowerCase())
+                    if (selectedCharacterIndex > -1) {
+                        currentCharacter.changeType(types[selectedCharacterIndex])
+                    }
                 } else {
                     currentCharacter.talk(message)
                 }
