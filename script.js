@@ -189,6 +189,10 @@ twitchClient.on('message', (channel, tags, message, self) => {
                     setTimeout(() => {
                         currentCharacter.walkTo(Math.floor((arenaDom.getBoundingClientRect().width / 100) * walkRegex[1]))
                     }, 20)
+                const changeRegex = message.match(/^!change (\w+)/)
+                if (changeRegex && types.indexOf(changeRegex[1])) {
+                    currentCharacter.type = changeRegex[1]
+                }
                 } else {
                     currentCharacter.talk(message)
                 }
