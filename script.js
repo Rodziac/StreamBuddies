@@ -32,8 +32,8 @@ const types = [
     "wolfRider"
 ]
 class Character {
-    constructor(name) {
-        this.type = types[Math.floor(Math.random() * types.length)]
+    constructor(name, type) {
+        this.type = type || types[Math.floor(Math.random() * types.length)]
         this.altitude = 0
         this.position = Math.floor(Math.random() * arenaDom.getBoundingClientRect().width)
         this.state = "idle"
@@ -158,20 +158,25 @@ twitchClient.on('message', (channel, tags, message, self) => {
     if (currentCharacter) {
         currentCharacter._setDeathTimer()
     }
-    switch (message) {
-        case '!join':
+    switch (0) {
+        case message.indexOf('!join'):
             if (!currentCharacter) {
-                characters[tags['display-name']] = new Character(tags['display-name'])
+                let charType = null
+                const messageSplit = message.split(" ")
+                if (messageSplit.length > 1 && types.indexOf(messageSplit[1]) > -1) {
+                    charType = messageSplit[1]
+                }
+                characters[tags['display-name']] = new Character(tags['display-name'], charType)
             }
             break;
-        case '!leave':
+        case message.indexOf('!leave'):
             if (currentCharacter) {
                 clearTimeout(currentCharacter.disappearTimeout)
                 currentCharacter.domElement.remove()
                 characters[tags['display-name']] = null
             }
             break;
-        case '!jump':
+        case message.indexOf('!jump'):
             if (currentCharacter) {
                 currentCharacter.jump()
             }
